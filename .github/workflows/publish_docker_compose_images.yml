@@ -12,9 +12,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: build navitia_builder docker image
+    - name: build navitia_builder docker images
       working-directory: builder
       run: docker build --pull --no-cache=true -t navitia_builder .
     - name: create and publish images
-      run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock navitia_builder -b release -l -r -u ${{secrets.docker_user}} -p ${{secrets.docker_password}}
-
+      run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock navitia_builder -b dev -r -u ${{secrets.docker_user}} -p ${{secrets.docker_password}}
