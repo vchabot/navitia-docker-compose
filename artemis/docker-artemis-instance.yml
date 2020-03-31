@@ -274,17 +274,6 @@ services:
     expose:
       - "30000"
 
-  kraken-airport:
-    image: navitia/kraken:${TAG}
-    environment:
-        - KRAKEN_GENERAL_instance_name=airport
-        - KRAKEN_GENERAL_database=/srv/ed/output/airport.nav.lz4
-        - KRAKEN_BROKER_host=rabbitmq
-    volumes_from:
-      - tyr_beat:ro
-    expose:
-      - "30000"
-
   kraken-tcl:
     image: navitia/kraken:${TAG}
     environment:
@@ -458,8 +447,6 @@ services:
 
       - JORMUNGANDR_INSTANCE_saintomer={"key":"saintomer","zmq_socket":"tcp://kraken-saintomer:30000"}
 
-      - JORMUNGANDR_INSTANCE_airport={"key":"airport","zmq_socket":"tcp://kraken-airport:30000"}
-
       - JORMUNGANDR_INSTANCE_tcl={"key":"tcl","zmq_socket":"tcp://kraken-tcl:30000"}
 
       - JORMUNGANDR_INSTANCE_passe-minuit-02={"key":"passe-minuit-02","zmq_socket":"tcp://kraken-passe-minuit-02:30000"}
@@ -541,8 +528,6 @@ services:
       - INSTANCE_paysdelaloire=
 
       - INSTANCE_saintomer=
-
-      - INSTANCE_airport=
 
       - INSTANCE_tcl=
 
