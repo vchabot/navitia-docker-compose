@@ -1,6 +1,4 @@
 instances:
-- airport: 
-    test_class: Airport
 - airport-01: 
     test_class: Airport1
 - test-01: 
