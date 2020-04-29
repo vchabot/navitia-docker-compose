@@ -15,11 +15,13 @@ RUN apt-get update --fix-missing \
         libpq5 \
         libpq-dev \
         python-setuptools \
+        git \
     &&  pip install --no-cache-dir -r requirements.txt \
     &&  apt-get autoremove -y \
         python-dev \
         build-essential \
-        python-setuptools
+        python-setuptools \
+        git
 
 COPY tyr_settings.py /srv/navitia/settings.py
 

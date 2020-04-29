@@ -18,13 +18,15 @@ RUN apt-get update --fix-missing \
         libpq-dev \
         postgresql-client \
         python-setuptools \
+        git \
     &&  pip install --no-cache-dir -r requirements.txt \
     &&  pip install --no-cache-dir -U setuptools \
     &&  apt-get autoremove -y \
         python-dev \
         build-essential \ 
         libpq-dev \
-        python-setuptools
+        python-setuptools \
+        git
         
 COPY tyr_settings.py /srv/navitia/settings.py
 
