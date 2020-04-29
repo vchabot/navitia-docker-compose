@@ -14,11 +14,13 @@ RUN apt-get update --fix-missing \
         libpq-dev \
         python-setuptools \
         curl \
+        git \
     &&  pip install --no-cache-dir -r requirements.txt \
     &&  apt-get autoremove -y \
         build-essential \
         python-dev \
-        python-setuptools
+        python-setuptools \
+        git
 
 # ....
 # I don't see a better way, geos try to find libc and fail, so ugly hack to give it
