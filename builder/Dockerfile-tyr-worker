@@ -52,7 +52,7 @@ RUN wget --quiet $MIMIR_PKG_URL -O /tmp/mimir_pkg.zip && \
     unzip /tmp/cosmo2cities.zip -d /tmp && \
     dpkg -i /tmp/archive/cosmogony2cities*.deb
 
-RUN pip install --upgrade pip && pip install setuptools -U && pip install -r /usr/src/app/requirements.txt
+RUN pip install --upgrade pip && /usr/local/bin/pip install -r /usr/src/app/requirements.txt
 
 EXPOSE 5000
 
