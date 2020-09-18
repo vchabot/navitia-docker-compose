@@ -79,11 +79,11 @@ services:
     expose:
       - "30000"
 
-  kraken-stif:
+  kraken-idfm:
     image: navitia/kraken:${TAG}
     environment:
-        - KRAKEN_GENERAL_instance_name=stif
-        - KRAKEN_GENERAL_database=/srv/ed/output/stif.nav.lz4
+        - KRAKEN_GENERAL_instance_name=idfm
+        - KRAKEN_GENERAL_database=/srv/ed/output/idfm.nav.lz4
         - KRAKEN_BROKER_host=rabbitmq
     volumes_from:
       - tyr_beat:ro
@@ -413,7 +413,7 @@ services:
 
       - JORMUNGANDR_INSTANCE_sherbrooke={"key":"sherbrooke","zmq_socket":"tcp://kraken-sherbrooke:30000"}
 
-      - JORMUNGANDR_INSTANCE_stif={"key":"stif","zmq_socket":"tcp://kraken-stif:30000"}
+      - JORMUNGANDR_INSTANCE_idfm={"key":"idfm","zmq_socket":"tcp://kraken-idfm:30000"}
 
       - JORMUNGANDR_INSTANCE_test-03={"key":"test-03","zmq_socket":"tcp://kraken-test-03:30000"}
 
@@ -495,7 +495,7 @@ services:
 
       - INSTANCE_sherbrooke=
 
-      - INSTANCE_stif=
+      - INSTANCE_idfm=
 
       - INSTANCE_test-03=
 
