@@ -54,6 +54,8 @@ default   *        virtualbox   Running   tcp://192.168.99.100:2376           v1
 In this case, the IP is `192.168.99.100` instead of `localhost`, and you can query jormungandr on :
 http://192.168.99.100:9191/v1/coverage/default/lines
 
+See https://stackoverflow.com/questions/50890981/docker-port-mapping-is-not-working-on-windows-10
+
 ## Additional instances
 If you need additional instances, you can use the `docker-instances.jinja2` to generate another docker-compose file (if you want to do some shiny service discovery instead of this quick and dirty jinja template, we'll hapilly accept the contribution :wink: )
 
