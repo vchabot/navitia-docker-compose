@@ -41,6 +41,21 @@ Then you can query jormungandr:
 
 http://localhost:9191/v1/coverage/default/lines
 
+On Windows, Linux containers are created inside a virtual machine that runs on Windows host OS. This virtual machine gets assigned an IP. 
+To query jormungandr, you should use this IP instead of localhost.
+
+To know the IP assigned to the virtual machine, run the docker-machine ls command. You will get output similar to the following:
+
+```bash
+$ docker-machine ls
+NAME      ACTIVE   DRIVER       STATE     URL                         SWARM   DOCKER        ERRORS
+default   *        virtualbox   Running   tcp://192.168.99.100:2376           v18.05.0-ce
+```
+In this case, the IP is `192.168.99.100` instead of `localhost`, and you can query jormungandr on :
+http://192.168.99.100:9191/v1/coverage/default/lines
+
+See https://stackoverflow.com/questions/50890981/docker-port-mapping-is-not-working-on-windows-10
+
 ## Additional instances
 If you need additional instances, you can use the `docker-instances.jinja2` to generate another docker-compose file (if you want to do some shiny service discovery instead of this quick and dirty jinja template, we'll hapilly accept the contribution :wink: )
 
