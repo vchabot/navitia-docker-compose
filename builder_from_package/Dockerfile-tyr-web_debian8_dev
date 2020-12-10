@@ -1,0 +1,34 @@
+FROM navitia/debian8_dev
+
+COPY navitia_debian8_packages/navitia-common_9.0.0_all.deb navitia-common.deb
+COPY navitia_debian8_packages/navitia-tyr_9.0.0_all.deb navitia-tyr.deb
+
+# update package list from providers
+RUN apt-get update --fix-missing 
+
+# upgrade installed packages
+RUN  apt-get upgrade -y
+
+# install navitia-common package
+RUN dpkg -i ./navitia-common.deb || exit 0
+RUN apt-get install -f -y
+
+# install navitia-tyr package
+RUN dpkg -i ./navitia-tyr.deb || exit 0
+RUN apt-get install -f -y
+
+# install tyr requirements
+RUN pip install --no-cache-dir -r /usr/share/tyr/requirements.txt
+
+# install uwsgi
+RUN pip install uwsgi
+
+COPY tyr_settings.py /srv/navitia/settings.py
+ENV TYR_CONFIG_FILE=/srv/navitia/settings.py
+
+WORKDIR /usr/src/app/
+RUN cp /usr/bin/manage_tyr.py /usr/src/app/manage_tyr.py
+
+
+
+CMD ["uwsgi",  "--mount", "/=tyr:app",  "--http", "0.0.0.0:80"]

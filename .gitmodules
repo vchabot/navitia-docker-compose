@@ -1,0 +1,3 @@
+[submodule "builder/fabric_navitia"]
+	path = builder/fabric_navitia
+	url = git@github.com:CanalTP/fabric_navitia.git
