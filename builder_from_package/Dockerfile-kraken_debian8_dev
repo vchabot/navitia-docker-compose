@@ -14,7 +14,7 @@ RUN dpkg -i ./navitia-kraken.deb
 RUN apt-get install -f -y
 
 # kraken call 'nc' somewhere, so we install it
-RUN apt get install -y netcat
+RUN apt-get install -y netcat
 
 # put the binary in /srv/kraken
 RUN mkdir -p /srv/kraken
