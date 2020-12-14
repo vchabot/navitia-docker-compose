@@ -1,0 +1,30 @@
+FROM navitia/debian10_dev
+
+# copy package from context inside the docker
+COPY navitia_debian10_packages/navitia-kraken_9.0.0_amd64.deb navitia-kraken.deb
+
+# update package list from providers
+RUN apt-get update --fix-missing 
+
+# upgrade installed packages
+RUN  apt-get upgrade -y
+
+# install navitia-kraken package
+RUN dpkg -i ./navitia-kraken.deb 
+RUN apt-get install -f -y
+
+# kraken call 'nc' somewhere, so we install it
+RUN apt-get install -y netcat
+
+# put the binary in /srv/kraken
+RUN mkdir -p /srv/kraken
+RUN cp /usr/bin/kraken /srv/kraken/kraken
+
+EXPOSE 30000
+ENV KRAKEN_GENERAL_zmq_socket=tcp://*:30000
+ENV KRAKEN_GENERAL_log_level=INFO
+HEALTHCHECK CMD nc -z localhost 30000 || exit 1
+
+CMD ["/srv/kraken/kraken"]
+
+
