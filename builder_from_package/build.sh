@@ -99,24 +99,21 @@ pip install -r core_team_ci_tools/github_artifacts/requirements.txt
 rm -f $archive
 python core_team_ci_tools/github_artifacts/github_artifacts.py -o CanalTP -r navitia -t $token -w $workflow -a $archive --output-dir .
 
-# let's dowload mimirsbrunn package
-python core_team_ci_tools/github_artifacts/github_artifacts.py -o CanalTP -r mimirsbrunn -t $token -w build_package.yml -a "archive.zip" --output-dir .
-
-deactivate
-
 # let's unzip what we received
 rm -f ./$inside_archive
-unzip ${archive}.zip
+unzip ${archive}
 
 # let's unzip (again) to obtain the pacakges
-rm -rf navitia_debian8_packages/
-mkdir -p navitia_debian8_packages/
-unzip navitia_debian8_packages.zip -d navitia_debian8_packages
+rm -f navitia*.deb
+unzip ${inside_archive} -d .
+
+# let's dowload mimirsbrunn package
+python core_team_ci_tools/github_artifacts/github_artifacts.py -o CanalTP -r mimirsbrunn -t $token -w build_package.yml -a "archive.zip" --output-dir .
 
 rm -f mimirsbrunn*.deb
 unzip archive.zip -d .
 
-exit 1
+deactivate
 
 components='jormungandr kraken tyr-beat tyr-worker tyr-web instances-configurator'
 

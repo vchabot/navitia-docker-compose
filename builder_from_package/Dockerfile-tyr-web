@@ -1,7 +1,7 @@
 FROM navitia/debian8_dev
 
-COPY navitia_debian8_packages/navitia-common*.deb .
-COPY navitia_debian8_packages/navitia-tyr*.deb .
+COPY navitia-common*.deb .
+COPY navitia-tyr*.deb .
 
 # update package list from providers
 RUN apt-get update --fix-missing 

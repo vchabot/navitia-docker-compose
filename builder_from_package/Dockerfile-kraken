@@ -1,7 +1,7 @@
 FROM navitia/debian8_dev
 
 # copy package from context inside the docker
-COPY navitia_debian8_packages/navitia-kraken_*.deb .
+COPY navitia-kraken_*.deb .
 
 # update package list from providers
 RUN apt-get update --fix-missing 
