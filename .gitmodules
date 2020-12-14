@@ -1,1 +1,4 @@
 
+[submodule "builder_from_package/core_team_ci_tools"]
+	path = builder_from_package/core_team_ci_tools
+	url = git@github.com:CanalTP/core_team_ci_tools.git
