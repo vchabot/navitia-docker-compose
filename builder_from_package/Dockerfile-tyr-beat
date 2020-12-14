@@ -1,7 +1,7 @@
 FROM navitia/debian8_dev
 
-COPY navitia_debian8_packages/navitia-common_9.0.0_all.deb navitia-common.deb
-COPY navitia_debian8_packages/navitia-tyr_9.0.0_all.deb navitia-tyr.deb
+COPY navitia_debian8_packages/navitia-common*.deb .
+COPY navitia_debian8_packages/navitia-tyr*.deb .
 
 # update package list from providers
 RUN apt-get update --fix-missing 
@@ -10,11 +10,11 @@ RUN apt-get update --fix-missing
 RUN  apt-get upgrade -y
 
 # install navitia-common package
-RUN dpkg -i ./navitia-common.deb || exit 0
+RUN dpkg -i ./navitia-common*.deb || exit 0
 RUN apt-get install -f -y
 
 # install navitia-tyr package
-RUN dpkg -i ./navitia-tyr.deb || exit 0
+RUN dpkg -i ./navitia-tyr*.deb || exit 0
 RUN apt-get install -f -y
 
 # install tyr requirements

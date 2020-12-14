@@ -53,11 +53,11 @@ then
 fi
 
 if [[ $branch == "dev" ]]; then
-    worflow="build_navitia_packages_for_dev_multi_distribution.yml"
+    workflow="build_navitia_packages_for_dev_multi_distribution.yml"
     archive="navitia-debian8-packages.zip"
     inside_archive="navitia_debian8_packages.zip"
 elif [[ $branch == "release" ]]; then
-    worflow="build_navitia_packages_release.yml"
+    workflow="build_navitia_packages_for_release.yml"
     archive="navitia-debian-packages.zip"
     inside_archive="navitia_debian_packages.zip"
 else 
@@ -95,9 +95,13 @@ virtualenv -py python3 ci_tools
 . ci_tools/bin/activate
 pip install -r core_team_ci_tools/github_artifacts/requirements.txt
 
-# let's download the packages
+# let's download the navitia packages
 rm -f $archive
-python core_team_ci_tools/github_artifacts/github_artifacts.py -o CanalTP -r navitia -t $token -w $worflow -a $archive --output-dir .
+python core_team_ci_tools/github_artifacts/github_artifacts.py -o CanalTP -r navitia -t $token -w $workflow -a $archive --output-dir .
+
+# let's dowload mimirsbrunn package
+python core_team_ci_tools/github_artifacts/github_artifacts.py -o CanalTP -r mimirsbrunn -t $token -w build_package.yml -a "archive.zip" --output-dir .
+
 deactivate
 
 # let's unzip what we received
@@ -108,6 +112,11 @@ unzip ${archive}.zip
 rm -rf navitia_debian8_packages/
 mkdir -p navitia_debian8_packages/
 unzip navitia_debian8_packages.zip -d navitia_debian8_packages
+
+rm -f mimirsbrunn*.deb
+unzip archive.zip -d .
+
+exit 1
 
 components='jormungandr kraken tyr-beat tyr-worker tyr-web instances-configurator'
 
@@ -146,10 +155,15 @@ fi
 # clean up
 # we remove the ./navitia/ dir
 rm -rf ./navitia/
-# the dowloaded archive
+# the dowloaded archive for navitia package
 rm -f ./$archive
 # what was inside the archive
 rm -f ./$inside_archive
 
 # and all dowloaded packages
 rm -rf navitia_debian8_packages/
+
+# the archive from mimirsbrunn package
+rm -f archive.zip
+# and what was inside the package
+rm -f mimirsbrunn*.deb

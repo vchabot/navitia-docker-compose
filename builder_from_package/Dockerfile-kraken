@@ -1,7 +1,7 @@
 FROM navitia/debian8_dev
 
 # copy package from context inside the docker
-COPY navitia_debian8_packages/navitia-kraken_9.0.0_amd64.deb navitia-kraken.deb
+COPY navitia_debian8_packages/navitia-kraken_*.deb .
 
 # update package list from providers
 RUN apt-get update --fix-missing 
@@ -10,7 +10,7 @@ RUN apt-get update --fix-missing
 RUN  apt-get upgrade -y
 
 # install navitia-kraken package
-RUN dpkg -i ./navitia-kraken.deb 
+RUN dpkg -i ./navitia-kraken*.deb 
 RUN apt-get install -f -y
 
 # kraken call 'nc' somewhere, so we install it
