@@ -158,7 +158,7 @@ rm -f ./$archive
 rm -f ./$inside_archive
 
 # and all dowloaded packages
-rm -rf navitia_debian8_packages/
+rm -f navitia*.deb
 
 # the archive from mimirsbrunn package
 rm -f archive.zip
