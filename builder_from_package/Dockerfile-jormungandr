@@ -3,6 +3,9 @@ FROM navitia/debian8_dev
 COPY navitia-common*.deb .
 COPY navitia-jormungandr*.deb .
 
+# remove canaltp apt repo if present
+rm -f /etc/apt/sources.list.d/canaltp.list 
+
 # update package list from providers
 RUN apt-get update --fix-missing 
 
