@@ -104,17 +104,17 @@ python core_team_ci_tools/github_artifacts/github_artifacts.py -o CanalTP -r nav
 
 # let's unzip what we received
 rm -f ./$inside_archive
-unzip ${archive}
+unzip -q ${archive}
 
 # let's unzip (again) to obtain the packages
 rm -f navitia*.deb
-unzip ${inside_archive} -d .
+unzip -q ${inside_archive} -d .
 
 # let's download mimirsbrunn package
 python core_team_ci_tools/github_artifacts/github_artifacts.py -o CanalTP -r mimirsbrunn -t $token -w build_package.yml -a "archive.zip" --output-dir .
 
 rm -f mimirsbrunn*.deb
-unzip archive.zip -d .
+unzip -q archive.zip -d .
 
 #deactivate
 
