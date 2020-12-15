@@ -1,8 +1,5 @@
 FROM navitia/debian8_dev
 
-# add canaltp local repo
-RUN echo "nameserver 10.50.83.15" > /etc/resolv.conf
-
 # copy package from context inside the docker
 COPY navitia-kraken_*.deb .
 
