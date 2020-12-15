@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# exit this script with failure on any error
+set -e
+
 function show_help() {
     cat << EOF
 Usage: ${0##*/} -b branch -o oauth_token [-t tag] [-r -u dockerhub_user -p dockerhub_password]
