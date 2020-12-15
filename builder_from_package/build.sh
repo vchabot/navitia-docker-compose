@@ -97,17 +97,17 @@ pip install -r core_team_ci_tools/github_artifacts/requirements.txt
 
 # let's download the navitia packages
 rm -f $archive
-python core_team_ci_tools/github_artifacts/github_artifacts.py -o CanalTP -r navitia -t $token -w $workflow -a $archive --output-dir .
+python core_team_ci_tools/github_artifacts/github_artifacts.py -o CanalTP -r navitia -t $token -w $workflow -b $branch -a $archive --output-dir .
 
 # let's unzip what we received
 rm -f ./$inside_archive
 unzip ${archive}
 
-# let's unzip (again) to obtain the pacakges
+# let's unzip (again) to obtain the packages
 rm -f navitia*.deb
 unzip ${inside_archive} -d .
 
-# let's dowload mimirsbrunn package
+# let's download mimirsbrunn package
 python core_team_ci_tools/github_artifacts/github_artifacts.py -o CanalTP -r mimirsbrunn -t $token -w build_package.yml -a "archive.zip" --output-dir .
 
 rm -f mimirsbrunn*.deb
