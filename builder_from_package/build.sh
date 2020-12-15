@@ -90,10 +90,10 @@ git clone https://x-token-auth:${token}@github.com/CanalTP/navitia.git --branch 
 git submodule update --init
 
 # we setup the right python environnement to use core_team_ci_tools
-pip install virtualenv -U
-virtualenv -py python3 ci_tools
-. ci_tools/bin/activate
-pip install -r core_team_ci_tools/github_artifacts/requirements.txt
+#pip install virtualenv -U
+#virtualenv -py python3 ci_tools
+#. ci_tools/bin/activate
+pip install -r core_team_ci_tools/github_artifacts/requirements.txt --user
 
 # let's download the navitia packages
 rm -f $archive
@@ -113,7 +113,7 @@ python core_team_ci_tools/github_artifacts/github_artifacts.py -o CanalTP -r mim
 rm -f mimirsbrunn*.deb
 unzip archive.zip -d .
 
-deactivate
+#deactivate
 
 # let's retreive the navitia version 
 pushd navitia
