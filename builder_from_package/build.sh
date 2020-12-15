@@ -115,12 +115,13 @@ unzip archive.zip -d .
 
 deactivate
 
-components='jormungandr kraken tyr-beat tyr-worker tyr-web instances-configurator'
-
+# let's retreive the navitia version 
 pushd navitia
 version=$(git describe)
 echo "building version $version"
 popd
+
+components='jormungandr kraken tyr-beat tyr-worker tyr-web instances-configurator'
 
 for component in $components; do
     echo "*********  Building $component ***************"
