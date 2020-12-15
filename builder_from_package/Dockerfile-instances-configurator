@@ -1,18 +1,5 @@
-FROM navitia/debian8_dev
+FROM navitia/master
 
-# remove canaltp apt repo if present
-RUN rm -f /etc/apt/sources.list.d/canaltp.list 
-
-# update package list from providers
-RUN apt-get update --fix-missing 
-
-# upgrade installed packages
-RUN  apt-get upgrade -y
-
-
-
-# install postgresql-client
-RUN apt-get install -y postgresql-client 
 
 COPY navitia/source/sql/alembic /usr/share/navitia/ed/alembic
 COPY /navitia/source/sql/requirements.txt /tmp/requirements.txt

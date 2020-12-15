@@ -1,16 +1,7 @@
-FROM navitia/debian8_dev
+FROM navitia/master
 
 COPY navitia-common_*.deb ./
 COPY navitia-jormungandr_*.deb ./
-
-# remove canaltp apt repo if present
-RUN rm -f /etc/apt/sources.list.d/canaltp.list 
-
-# update package list from providers
-RUN apt-get update --fix-missing 
-
-# upgrade installed packages
-RUN  apt-get upgrade -y
 
 # install navitia-common package
 RUN dpkg -i ./navitia-common_*.deb || exit 0
@@ -25,9 +16,6 @@ RUN pip install --no-cache-dir -r /usr/share/jormungandr/requirements.txt
 
 # install uwsgi
 RUN pip install uwsgi
-
-# jormun calls curl
-RUN apt-get install -y curl
 
 WORKDIR /usr/src/app/
 

@@ -90,6 +90,7 @@ git clone https://x-token-auth:${token}@github.com/CanalTP/navitia.git --branch 
 
 # let's dowload the package built on gihub actions
 # for that we need the submodule core_team_ci_tools
+rm -rf ./core_team_ci_tools/
 git clone https://x-token-auth:${token}@github.com/CanalTP/core_team_ci_tools.git ./core_team_ci_tools/
 
 # we setup the right python environnement to use core_team_ci_tools
@@ -124,14 +125,17 @@ version=$(git describe)
 echo "building version $version"
 popd
 
-components='jormungandr kraken tyr-beat tyr-worker tyr-web instances-configurator'
 
+
+run docker build  -f Dockerfile-master -t navitia/master .
+
+components='jormungandr kraken tyr-beat tyr-worker tyr-web instances-configurator'
 for component in $components; do
     echo "*********  Building $component ***************"
-    run docker build --no-cache -t navitia/$component:$version -f  Dockerfile-${component} .
+    run docker build  -t navitia/$component:$version -f  Dockerfile-${component} .
     
     # tag image if a -t tag was given
-    if [ -n $tag ]; then
+    if [ -n "${tag}" ]; then
         run docker tag navitia/$component:$version navitia/$component:$tag
     fi
 done
@@ -145,7 +149,7 @@ if [[ $push -eq 1 ]]; then
     for component in $components; do
         docker push navitia/$component:$version
         # also push tagged image if -t tag was given
-        if [ -n $tag ]; then
+        if [ -n "${tag}" ]; then
             docker push navitia/$component:$tag
         fi
     done
@@ -156,6 +160,8 @@ fi
 # clean up
 # we remove the ./navitia/ dir
 rm -rf ./navitia/
+# we remove the ./navitia/ dir
+rm -rf ./core_team_ci_tools/
 # the dowloaded archive for navitia package
 rm -f ./$archive
 # what was inside the archive
@@ -168,3 +174,6 @@ rm -f navitia*.deb
 rm -f archive.zip
 # and what was inside the package
 rm -f mimirsbrunn*.deb
+
+# let's remove the navita/master docker image
+docker rmi -f navitia/master
