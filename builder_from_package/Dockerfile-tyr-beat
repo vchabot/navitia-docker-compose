@@ -3,6 +3,9 @@ FROM navitia/debian8_dev
 COPY navitia-common*.deb .
 COPY navitia-tyr*.deb .
 
+# add canaltp local repo
+RUN echo "nameserver 10.50.83.15" > /etc/resolv.conf
+
 # update package list from providers
 RUN apt-get update --fix-missing 
 
