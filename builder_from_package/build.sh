@@ -146,7 +146,7 @@ if [[ $push -eq 1 ]]; then
         docker push navitia/$component:$version
         # also push tagged image if -t tag was given
         if [ -n $tag ]; then
-            docker push navitia/$component:tag
+            docker push navitia/$component:$tag
         fi
     done
     docker logout
