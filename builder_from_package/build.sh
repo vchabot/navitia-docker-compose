@@ -127,12 +127,12 @@ popd
 
 
 
-run docker build  -f Dockerfile-master -t navitia/master .
+run docker build --no-cache -f Dockerfile-master -t navitia/master .
 
 components='jormungandr kraken tyr-beat tyr-worker tyr-web instances-configurator'
 for component in $components; do
     echo "*********  Building $component ***************"
-    run docker build  -t navitia/$component:$version -f  Dockerfile-${component} .
+    run docker build --no-cache -t navitia/$component:$version -f  Dockerfile-${component} .
     
     # tag image if a -t tag was given
     if [ -n "${tag}" ]; then
