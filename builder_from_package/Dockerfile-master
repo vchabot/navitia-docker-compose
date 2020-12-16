@@ -1,8 +1,5 @@
 FROM navitia/debian8_dev
 
-# remove canaltp apt repo if present
-RUN rm -f /etc/apt/sources.list.d/canaltp.list 
-
 # update package list from providers
 RUN apt-get update --fix-missing 
 
