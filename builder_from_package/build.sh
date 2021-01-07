@@ -30,7 +30,7 @@ function run() {
 }
 
 
-while getopts "o:t:b:rp:u:h" opt; do
+while getopts "o:t:b:rp:u:e:f:h" opt; do
     case $opt in
         o) token=$OPTARG
             ;;
@@ -61,7 +61,8 @@ then
      show_help
      exit 1
 fi
-if [[ $event == "push"]]
+
+if [[ $event == "push" ]]; then
     if [[ $branch == "dev" ]]; then
         workflow="build_navitia_packages_for_dev_multi_distribution.yml"
         archive="navitia-debian8-packages.zip"
@@ -77,16 +78,17 @@ if [[ $event == "push"]]
         exit 1
     fi
     fork="CanalTP"
-fi
-elif [[ $event == "pull_request"]]
-    if [[ -z $branch]]
+elif [[ $event == "pull_request" ]]; then
+    if [[ -z $branch ]]; then
         echo "branch must be set for pull_request events (-e pull_request -b branch_name)"
         show_help
         exit 1
-    if [[ -z $fork]]
+    fi
+    if [[ -z $fork ]]; then
         echo "fork must be set for pull_request events (-e pull_request -f fork)"
         show_help
         exit 1
+    fi
     workflow="build_navitia_packages_for_dev_multi_distribution.yml"
     archive="navitia-debian8-packages.zip"
     inside_archive="navitia_debian8_packages.zip"
@@ -95,6 +97,7 @@ else
     echo "***${event}***"
     show_help
     exit 1
+fi
 
 if [[ $push -eq 1 ]]; then
     if [ -z $user ];
@@ -117,7 +120,7 @@ git clone https://x-token-auth:${token}@github.com/${fork}/navitia.git --branch 
 # let's dowload the package built on gihub actions
 # for that we need the submodule core_team_ci_tools
 rm -rf ./core_team_ci_tools/
-git clone https://x-token-auth:${token}@github.com/CanalTP/core_team_ci_tools.git ./core_team_ci_tools/
+git clone https://x-token-auth:${token}@github.com/pbench/core_team_ci_tools.git --branch pull_request_artifacts ./core_team_ci_tools/
 
 # we setup the right python environnement to use core_team_ci_tools
 #pip install virtualenv -U
@@ -127,7 +130,7 @@ pip install -r core_team_ci_tools/github_artifacts/requirements.txt --user
 
 # let's download the navitia packages
 rm -f $archive
-python core_team_ci_tools/github_artifacts/github_artifacts.py -o $fork -r navitia -t $token -w $workflow -b $branch -a $archive -e $event--output-dir .
+python core_team_ci_tools/github_artifacts/github_artifacts.py -o CanalTP -r navitia -t $token -w $workflow -b $branch -a $archive -e $event --output-dir .
 
 # let's unzip what we received
 rm -f ./$inside_archive
