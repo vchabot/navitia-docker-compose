@@ -120,7 +120,7 @@ git clone https://x-token-auth:${token}@github.com/${fork}/navitia.git --branch 
 # let's dowload the package built on gihub actions
 # for that we need the submodule core_team_ci_tools
 rm -rf ./core_team_ci_tools/
-git clone https://x-token-auth:${token}@github.com/pbench/core_team_ci_tools.git --branch pull_request_artifacts ./core_team_ci_tools/
+git clone https://x-token-auth:${token}@github.com/CanalTP/core_team_ci_tools.git  ./core_team_ci_tools/
 
 # we setup the right python environnement to use core_team_ci_tools
 #pip install virtualenv -U
