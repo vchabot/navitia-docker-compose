@@ -5,13 +5,16 @@ set -e
 
 function show_help() {
     cat << EOF
-Usage: ${0##*/} -b branch -o oauth_token [-t tag] [-r -u dockerhub_user -p dockerhub_password]
-    -b      [dev|release]
+Usage: ${0##*/} -e event -b branch -o oauth_token (-f pull_request_fork) [-t tag] [-r -u dockerhub_user -p dockerhub_password]
+    -e      [push|pull_request]
+    -b      [dev|release] if -e push, or the branch name if -e pull_request
+    -f      pull_request fork owner, needed only if -e pull_request
     -o      oauth token for github
     -t      tag images with the given string
     -r      push images to a registry
     -u      username for authentication on dockerhub
     -p      password for authentication on dockerhub
+
 EOF
 }
 
@@ -27,7 +30,7 @@ function run() {
 }
 
 
-while getopts "o:t:b:rp:u:h" opt; do
+while getopts "o:t:b:rp:u:e:f:h" opt; do
     case $opt in
         o) token=$OPTARG
             ;;
@@ -40,6 +43,10 @@ while getopts "o:t:b:rp:u:h" opt; do
         p) password=$OPTARG
             ;;
         u) user=$OPTARG
+            ;;
+        e) event=$OPTARG
+            ;;
+        f) fork=$OPTARG
             ;;
         h|\?)
             show_help
@@ -55,17 +62,39 @@ then
      exit 1
 fi
 
-if [[ $branch == "dev" ]]; then
+if [[ $event == "push" ]]; then
+    if [[ $branch == "dev" ]]; then
+        workflow="build_navitia_packages_for_dev_multi_distribution.yml"
+        archive="navitia-debian8-packages.zip"
+        inside_archive="navitia_debian8_packages.zip"
+    elif [[ $branch == "release" ]]; then
+        workflow="build_navitia_packages_for_release.yml"
+        archive="navitia-debian-packages.zip"
+        inside_archive="navitia_debian_packages.zip"
+    else 
+        echo """branch must be "dev" or "release" for push events (-e push)"""
+        echo "***${branch}***"
+        show_help
+        exit 1
+    fi
+    fork="CanalTP"
+elif [[ $event == "pull_request" ]]; then
+    if [[ -z $branch ]]; then
+        echo "branch must be set for pull_request events (-e pull_request -b branch_name)"
+        show_help
+        exit 1
+    fi
+    if [[ -z $fork ]]; then
+        echo "fork must be set for pull_request events (-e pull_request -f fork)"
+        show_help
+        exit 1
+    fi
     workflow="build_navitia_packages_for_dev_multi_distribution.yml"
     archive="navitia-debian8-packages.zip"
     inside_archive="navitia_debian8_packages.zip"
-elif [[ $branch == "release" ]]; then
-    workflow="build_navitia_packages_for_release.yml"
-    archive="navitia-debian-packages.zip"
-    inside_archive="navitia_debian_packages.zip"
-else 
-    echo """branch must be "dev" or "release" """
-    echo "***${branch}***"
+else
+    echo """event must be "push" or "pull_request" """
+    echo "***${event}***"
     show_help
     exit 1
 fi
@@ -86,12 +115,12 @@ fi
 
 # clone navitia source code
 rm -rf ./navitia/
-git clone https://x-token-auth:${token}@github.com/CanalTP/navitia.git --branch $branch ./navitia/
+git clone https://x-token-auth:${token}@github.com/${fork}/navitia.git --branch $branch ./navitia/
 
 # let's dowload the package built on gihub actions
 # for that we need the submodule core_team_ci_tools
 rm -rf ./core_team_ci_tools/
-git clone https://x-token-auth:${token}@github.com/CanalTP/core_team_ci_tools.git ./core_team_ci_tools/
+git clone https://x-token-auth:${token}@github.com/CanalTP/core_team_ci_tools.git  ./core_team_ci_tools/
 
 # we setup the right python environnement to use core_team_ci_tools
 #pip install virtualenv -U
@@ -101,7 +130,7 @@ pip install -r core_team_ci_tools/github_artifacts/requirements.txt --user
 
 # let's download the navitia packages
 rm -f $archive
-python core_team_ci_tools/github_artifacts/github_artifacts.py -o CanalTP -r navitia -t $token -w $workflow -b $branch -a $archive --output-dir .
+python core_team_ci_tools/github_artifacts/github_artifacts.py -o CanalTP -r navitia -t $token -w $workflow -b $branch -a $archive -e $event --output-dir .
 
 # let's unzip what we received
 rm -f ./$inside_archive
