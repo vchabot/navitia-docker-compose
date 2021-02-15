@@ -5,6 +5,7 @@ COPY navitia-tyr_*.deb ./
 COPY navitia-ed_*.deb ./
 COPY navitia-cities_*.deb ./
 COPY mimirsbrunn_*.deb ./
+COPY cosmogony2cities_*.deb ./
 
 # install navitia-common package
 RUN dpkg -i ./navitia-common_*.deb || exit 0
@@ -26,6 +27,9 @@ RUN apt-get install -f -y
 RUN dpkg -i ./mimirsbrunn_*.deb || exit 0
 RUN apt-get install -f -y
 
+# install cosmogony2cities package
+dpkg -i ./cosmogony2cities*.deb || exit 0
+RUN apt-get install -f -y
 
 # install tyr requirements
 RUN pip install --no-cache-dir -r /usr/share/tyr/requirements.txt
