@@ -141,10 +141,16 @@ rm -f navitia*.deb
 unzip -q ${inside_archive} -d .
 
 # let's download mimirsbrunn package
-python core_team_ci_tools/github_artifacts/github_artifacts.py -o CanalTP -r mimirsbrunn -t $token -w build_package.yml -a "archive.zip" --output-dir .
+python core_team_ci_tools/github_artifacts/github_artifacts.py -o CanalTP -r mimirsbrunn -t $token -w release.yml -a "debian-package-release.zip" --output-dir .
+unzip debian-package-release.zip
+# we select mimirsbrunn_jessie-*.deb
+rm -f mimirsbrunn_buster*.deb mimirsbrunn_stretch*.deb debian-package-release.zip
 
-rm -f mimirsbrunn*.deb
-unzip -q archive.zip -d .
+# Download cosmogony2cities
+python core_team_ci_tools/github_artifacts/github_artifacts.py -o CanalTP -r cosmogony2cities -t  $token -w build_package.yml -a "archive.zip" --output-dir .
+# cosmogony2cities_*.deb 
+unzip archive.zip
+rm -f archive.zip
 
 #deactivate
 
