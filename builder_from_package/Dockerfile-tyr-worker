@@ -28,7 +28,7 @@ RUN dpkg -i ./mimirsbrunn_*.deb || exit 0
 RUN apt-get install -f -y
 
 # install cosmogony2cities package
-dpkg -i ./cosmogony2cities*.deb || exit 0
+RUN dpkg -i ./cosmogony2cities*.deb || exit 0
 RUN apt-get install -f -y
 
 # install tyr requirements
