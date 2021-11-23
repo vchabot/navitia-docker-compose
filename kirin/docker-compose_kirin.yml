@@ -16,7 +16,7 @@ services:
     restart: always
     depends_on:
       - kirin_configurator
-    command: sh -c "while ! pg_isready -h kirin_database -d kirin -U navitia; do sleep 5; done; sleep 10; python ./manage.py load_realtime"
+    command: sh -c "while ! pg_isready -h kirin_database -d kirin -U navitia; do sleep 5; done; sleep 10; python flask load_realtime"
     env_file: kirin/kirin.env
 
   kirin_database:
@@ -34,7 +34,7 @@ services:
     working_dir: /usr/src/app
     depends_on:
       - "kirin_database"
-    command: sh -c "while ! pg_isready -h kirin_database -d kirin -U navitia; do sleep 5; done; python manage.py db upgrade"
+    command: sh -c "while ! pg_isready -h kirin_database -d kirin -U navitia; do sleep 5; done; python flask db upgrade"
 
   rabbitmq_kirin:
     image: rabbitmq:management
